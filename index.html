@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Design Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-light: #6a5af9;
+            --secondary-light: #f0f2f5;
+            --background-light: #ffffff;
+            --text-light: #1c1e21;
+            --correct-light: #4caf50;
+            --incorrect-light: #f44336;
+            --card-bg-light: #ffffff;
+            --border-light: #e0e0e0;
+
+            --primary-dark: #7b6ef1;
+            --secondary-dark: #3a3b3c;
+            --background-dark: #18191a;
+            --text-dark: #e4e6eb;
+            --correct-dark: #66bb6a;
+            --incorrect-dark: #ef5350;
+            --card-bg-dark: #242526;
+            --border-dark: #3a3b3c;
+            
+            --font-family: 'Poppins', sans-serif;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.3s;
+            --font-size-base: 16px;
+        }
+
+        html {
+            font-size: var(--font-size-base);
+        }
+
+        [data-theme="dark"] {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --background: var(--background-dark);
+            --text: var(--text-dark);
+            --correct: var(--correct-dark);
+            --incorrect: var(--incorrect-dark);
+            --card-bg: var(--card-bg-dark);
+            --border: var(--border-dark);
+        }
+
+        [data-theme="light"] {
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --background: var(--background-light);
+            --text: var(--text-light);
+            --correct: var(--correct-light);
+            --incorrect: var(--incorrect-light);
+            --card-bg: var(--card-bg-light);
+            --border: var(--border-light);
+        }
+        
+        [data-high-contrast="true"][data-theme="light"] {
+            --background: #ffffff;
+            --text: #000000;
+            --primary: #0000ff;
+            --card-bg: #ffffff;
+            --border: #000000;
+        }
+        
+        [data-high-contrast="true"][data-theme="dark"] {
+            --background: #000000;
+            --text: #ffffff;
+            --primary: #ffff00;
+            --card-bg: #000000;
+            --border: #ffffff;
+        }
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        .hidden { display: none !important; }
+
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            position: relative;
+            transition: background-color var(--transition-speed);
+        }
+
+        .screen {
+            padding: 32px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+
+        .loader {
+            border: 8px solid var(--secondary);
+            border-top: 8px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        p { margin-bottom: 16px; }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #5a48e3;
+            transform: translateY(-2px);
+        }
+        
+        .btn:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--text);
+        }
+        .btn-secondary:hover {
+            background-color: #dcdfe3;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        .error-message {
+            color: var(--incorrect);
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .topic-card {
+            background-color: var(--background);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+            text-align: center;
+            cursor: pointer;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .topic-card h3 {
+            margin-bottom: 8px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .quiz-option {
+            display: block;
+            width: 100%;
+            background-color: var(--secondary);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-align: left;
+            transition: all var(--transition-speed);
+            font-size: 1rem;
+        }
+        
+        .quiz-option:hover {
+            border-color: var(--primary);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background-color: #e0dcfd;
+        }
+        
+        [data-theme="dark"] .quiz-option.selected {
+            background-color: #4a417a;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--correct);
+            background-color: #e8f5e9;
+        }
+        
+        [data-theme="dark"] .quiz-option.correct {
+            background-color: #2e7d32;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--incorrect);
+            background-color: #ffcdd2;
+        }
+        
+        [data-theme="dark"] .quiz-option.incorrect {
+            background-color: #c62828;
+        }
+        
+        .quiz-option:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+        }
+        
+        .quiz-nav .btn {
+            width: 48%;
+        }
+
+        .results-summary {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .results-summary h2 {
+            font-size: 2.5rem;
+        }
+        
+        .results-breakdown {
+            margin-top: 24px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 32px;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .top-bar-controls {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+        }
+
+        .theme-toggle {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px;
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .theme-toggle-icon {
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .theme-toggle-ball {
+            background: var(--background);
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            transition: transform 0.2s linear;
+        }
+
+        [data-theme="dark"] .theme-toggle-ball {
+            transform: translateX(24px);
+        }
+        
+        #viewHistoryBtn {
+            position: absolute;
+            top: 16px;
+            right: 120px;
+            width: auto;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .accessibility-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .font-size-controls button {
+            width: 40px;
+            height: 40px;
+            margin: 0 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Top Bar Controls -->
+        <div class="top-bar-controls">
+            <button id="accessibilityBtn" class="control-btn" aria-label="Open Accessibility Settings">♿</button>
+            <div class="theme-toggle" id="themeToggle" role="switch" aria-checked="false" aria-label="Toggle dark mode">
+                <span class="theme-toggle-icon">☀️</span>
+                <span class="theme-toggle-icon">🌙</span>
+                <div class="theme-toggle-ball"></div>
+            </div>
+        </div>
+        
+        <!-- Intro -->
+        <div id="introScreen" class="screen hidden">
+            <h1>Creative Design Quiz</h1>
+            <p>Test your knowledge on design fundamentals, UX principles, and more. Sharpen your skills and see how you rank!</p>
+            <div class="loader-container" id="introLoader">
+                <div class="loader"></div>
+            </div>
+            <button id="getStartedBtn" class="btn hidden">Get Started</button>
+        </div>
+
+        <!-- Loader -->
+        <div id="loaderScreen" class="screen hidden">
+            <div class="loader-container"><div class="loader"></div></div>
+        </div>
+
+        <!-- Login -->
+        <div id="loginScreen" class="screen hidden">
+            <h1>Welcome Back!</h1>
+            <p>Please enter your details to begin.</p>
+            <div class="input-group">
+                <label for="userName">Your Name</label>
+                <input type="text" id="userName" placeholder="e.g., Jane Doe">
+            </div>
+            <div class="input-group">
+                <label for="accessCode">Access Code</label>
+                <input type="password" id="accessCode" placeholder="Enter the code">
+            </div>
+            <button id="loginBtn" class="btn">Login</button>
+            <p id="loginError" class="error-message hidden"></p>
+        </div>
+
+        <!-- Start -->
+        <div id="startScreen" class="screen hidden">
+            <h1>Quiz Instructions</h1>
+            <p>This quiz consists of 45 multiple-choice questions across 5 design topics.</p>
+            <p>You will have <strong>60 minutes</strong> to complete the entire quiz. Your progress will be saved automatically.</p>
+            <p>Once you select an answer, you cannot change it. Read each question carefully.</p>
+            <p>Good luck!</p>
+            <button id="continueBtn" class="btn">Continue</button>
+        </div>
+
+        <!-- Topics -->
+        <div id="topicsScreen" class="screen hidden">
+            <button id="viewHistoryBtn" class="btn btn-secondary">View History</button>
+            <h1>Choose a Topic</h1>
+            <p>Select a section to start. Your progress is saved across all sections.</p>
+            <div id="topicsGrid" class="topics-grid"></div>
+        </div>
+
+        <!-- Quiz -->
+        <div id="quizScreen" class="screen hidden">
+            <div class="quiz-header">
+                <span id="questionCounter"></span>
+                <span id="timer">Time: 60:00</span>
+            </div>
+            <h2 id="questionText"></h2>
+            <div id="optionsContainer" role="radiogroup" aria-labelledby="questionText"></div>
+            <div class="quiz-nav">
+                <button id="prevBtn" class="btn btn-secondary">Previous</button>
+                <button id="nextBtn" class="btn">Next</button>
+            </div>
+            <button id="completeSectionBtn" class="btn hidden" style="margin-top: 16px;">Complete Section</button>
+        </div>
+
+        <!-- Calculation -->
+        <div id="calculationScreen" class="screen hidden">
+            <div class="loader-container">
+                <div class="loader"></div>
+                <p style="margin-left: 16px;">Calculating your results...</p>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsScreen" class="screen hidden">
+            <div class="results-summary">
+                <h1 id="resultTitle"></h1>
+                <h2 id="finalScore"></h2>
+                <p id="finalPercentage"></p>
+                <p id="encouragementMessage"></p>
+            </div>
+            <div class="results-breakdown">
+                <h3>Section Breakdown</h3>
+                <div id="sectionResults"></div>
+            </div>
+            <button id="restartBtn" class="btn" style="margin-top: 24px;">Restart Quiz</button>
+        </div>
+        
+        <!-- History Modal -->
+        <div id="historyModal" class="modal hidden">
+            <div class="modal-content">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Quiz History</h2>
+                    <button id="closeHistoryBtn" class="btn" style="width: auto; padding: 8px 12px; font-size: 20px;">&times;</button>
+                </div>
+                <div id="historyList"></div>
+            </div>
+        </div>
+
+        <!-- Accessibility Modal -->
+        <div id="accessibilityModal" class="modal hidden">
+            <div class="modal-content">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Accessibility Settings</h2>
+                    <button id="closeAccessibilityBtn" class="btn" style="width: auto; padding: 8px 12px; font-size: 20px;">&times;</button>
+                </div>
+                <div class="accessibility-option">
+                    <label for="highContrastToggle">High Contrast Mode</label>
+                    <input type="checkbox" id="highContrastToggle">
+                </div>
+                <div class="accessibility-option">
+                    <span>Font Size</span>
+                    <div class="font-size-controls">
+                        <button id="decreaseFontBtn" class="btn">-</button>
+                        <button id="increaseFontBtn" class="btn">+</button>
+                    </div>
+                </div>
+                 <div class="accessibility-option">
+                    <label for="disableTimerToggle">Disable Timer</label>
+                    <input type="checkbox" id="disableTimerToggle">
+                </div>
+                <div class="accessibility-option">
+                    <label for="extendTimeBtn">Extend Time</label>
+                    <button id="extendTimeBtn" class="btn" style="width: auto; padding: 8px 16px;">+15 minutes</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const screens = {
+                intro: document.getElementById('introScreen'),
+                loader: document.getElementById('loaderScreen'),
+                login: document.getElementById('loginScreen'),
+                start: document.getElementById('startScreen'),
+                topics: document.getElementById('topicsScreen'),
+                quiz: document.getElementById('quizScreen'),
+                calculation: document.getElementById('calculationScreen'),
+                results: document.getElementById('resultsScreen'),
+            };
+            const getStartedBtn = document.getElementById('getStartedBtn');
+            const introLoader = document.getElementById('introLoader');
+            const loginBtn = document.getElementById('loginBtn');
+            const userNameInput = document.getElementById('userName');
+            const accessCodeInput = document.getElementById('accessCode');
+            const loginError = document.getElementById('loginError');
+            const continueBtn = document.getElementById('continueBtn');
+            const topicsGrid = document.getElementById('topicsGrid');
+            const questionCounter = document.getElementById('questionCounter');
+            const timerEl = document.getElementById('timer');
+            const questionText = document.getElementById('questionText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const completeSectionBtn = document.getElementById('completeSectionBtn');
+            const finalScoreEl = document.getElementById('finalScore');
+            const finalPercentageEl = document.getElementById('finalPercentage');
+            const resultTitle = document.getElementById('resultTitle');
+            const encouragementMessage = document.getElementById('encouragementMessage');
+            const sectionResultsContainer = document.getElementById('sectionResults');
+            const restartBtn = document.getElementById('restartBtn');
+            const viewHistoryBtn = document.getElementById('viewHistoryBtn');
+            const historyModal = document.getElementById('historyModal');
+            const closeHistoryBtn = document.getElementById('closeHistoryBtn');
+            const historyList = document.getElementById('historyList');
+            const themeToggle = document.getElementById('themeToggle');
+            const accessibilityBtn = document.getElementById('accessibilityBtn');
+            const accessibilityModal = document.getElementById('accessibilityModal');
+            const closeAccessibilityBtn = document.getElementById('closeAccessibilityBtn');
+            const highContrastToggle = document.getElementById('highContrastToggle');
+            const increaseFontBtn = document.getElementById('increaseFontBtn');
+            const decreaseFontBtn = document.getElementById('decreaseFontBtn');
+            const disableTimerToggle = document.getElementById('disableTimerToggle');
+            const extendTimeBtn = document.getElementById('extendTimeBtn');
+
+
+            // Quiz Configuration
+            const ACCESS_CODE = '6873';
+            const TOTAL_QUESTIONS = 45;
+            let TIME_LIMIT_MINUTES = 60;
+            const TOPICS = [
+                { id: 1, name: 'Design Fundamentals', category: 18, amount: 9 }, // Category: Computers
+                { id: 2, name: 'UX Principles', category: 22, amount: 9 }, // Category: Geography (placeholder)
+                { id: 3, name: 'Design Thinking', category: 23, amount: 9 }, // Category: History (placeholder)
+                { id: 4, name: 'UI Tools', category: 30, amount: 9 }, // Category: Gadgets (placeholder)
+                { id: 5, name: 'Product Thinking', category: 17, amount: 9 }, // Category: Science & Nature (placeholder)
+            ];
+
+            // App State
+            let state = {};
+            let accessibilitySettings = {};
+            let timerInterval;
+            let allQuestions = [];
+
+            // --- LOCAL FALLBACK QUESTIONS ---
+            const fallbackQuestions = {
+                "response_code": 0,
+                "results": [
+                    // Design Fundamentals
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "easy", "question": "What is the primary goal of good typography?", "correct_answer": "To enhance readability", "incorrect_answers": ["To look fancy", "To use as many fonts as possible", "To fill space"] },
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "easy", "question": "Which color model is used for web design?", "correct_answer": "RGB", "incorrect_answers": ["CMYK", "HSL", "Pantone"] },
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "medium", "question": "The rule of thirds is a principle related to:", "correct_answer": "Composition", "incorrect_answers": ["Typography", "Color Theory", "Animation"] },
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "medium", "question": "What does 'kerning' refer to in typography?", "correct_answer": "The spacing between individual letters", "incorrect_answers": ["The spacing between lines of text", "The height of a font", "The font weight"] },
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "hard", "question": "A vector graphic is composed of:", "correct_answer": "Mathematical equations", "incorrect_answers": ["Pixels", "Dots", "Raster lines"] },
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "easy", "question": "What is a wireframe?", "correct_answer": "A low-fidelity layout of a design", "incorrect_answers": ["A final, polished design", "A type of font", "A color palette"] },
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "medium", "question": "What is the purpose of a style guide?", "correct_answer": "To ensure design consistency", "incorrect_answers": ["To showcase a designer's portfolio", "To list CSS properties", "To create a sitemap"] },
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "hard", "question": "Which of these is NOT a principle of design?", "correct_answer": "Complexity", "incorrect_answers": ["Contrast", "Repetition", "Proximity"] },
+                    { "category": "Design Fundamentals", "type": "multiple", "difficulty": "medium", "question": "What is 'white space' in design?", "correct_answer": "The empty space between elements", "incorrect_answers": ["A background color", "A type of font", "A text box with no text"] },
+                    
+                    // UX Principles
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "easy", "question": "What does UX stand for?", "correct_answer": "User Experience", "incorrect_answers": ["User Expanse", "User Exit", "Unique Experience"] },
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "medium", "question": "Jakob's Law states that users prefer your site to work the same way as:", "correct_answer": "All the other sites they already know", "incorrect_answers": ["A completely new and unique system", "A video game interface", "A command-line interface"] },
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "medium", "question": "What is the main goal of A/B testing?", "correct_answer": "To compare two versions of a design to see which performs better", "incorrect_answers": ["To test if the code has bugs", "To check for accessibility issues", "To create two final versions of a product"] },
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "hard", "question": "The 'Five Second Test' is used to measure:", "correct_answer": "First impressions of a design", "incorrect_answers": ["How fast a page loads", "A user's reading speed", "The security of a website"] },
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "easy", "question": "What is a user persona?", "correct_answer": "A fictional character representing a target user group", "incorrect_answers": ["A real user's account profile", "A list of user requirements", "A marketing demographic"] },
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "medium", "question": "Hick's Law is related to:", "correct_answer": "The time it takes to make a decision", "incorrect_answers": ["The aesthetic appeal of a design", "The physical size of a button", "The color contrast of text"] },
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "hard", "question": "What is cognitive load in UX design?", "correct_answer": "The amount of mental effort required to use a product", "incorrect_answers": ["The number of features in an app", "The time it takes for a page to load", "The complexity of the backend code"] },
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "easy", "question": "What is the purpose of user research?", "correct_answer": "To understand user behaviors, needs, and motivations", "incorrect_answers": ["To sell products to users", "To create marketing campaigns", "To decide which features to build first"] },
+                    { "category": "UX Principles", "type": "multiple", "difficulty": "medium", "question": "Which of these is a key heuristic of usability, according to Jakob Nielsen?", "correct_answer": "Consistency and standards", "incorrect_answers": ["Visual novelty", "Complex animations", "Use of jargon"] },
+
+                    // Design Thinking
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "easy", "question": "What is the first stage of the Design Thinking process?", "correct_answer": "Empathize", "incorrect_answers": ["Prototype", "Ideate", "Test"] },
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "medium", "question": "In which stage of Design Thinking do you create a point of view (POV) statement?", "correct_answer": "Define", "incorrect_answers": ["Ideate", "Prototype", "Empathize"] },
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "medium", "question": "The 'Ideate' stage is primarily about:", "correct_answer": "Generating a wide range of ideas", "incorrect_answers": ["Building a functional product", "Testing with users", "Defining the problem"] },
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "hard", "question": "A 'Crazy 8s' is a method used for:", "correct_answer": "Rapid idea generation", "incorrect_answers": ["User testing", "Creating high-fidelity prototypes", "Defining user personas"] },
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "easy", "question": "What is a prototype?", "correct_answer": "An early model of a product to test concepts", "incorrect_answers": ["The final, market-ready product", "A detailed technical specification", "A marketing plan"] },
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "medium", "question": "The final stage of the Design Thinking process is:", "correct_answer": "Test", "incorrect_answers": ["Launch", "Implement", "Define"] },
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "hard", "question": "Design Thinking is best described as:", "correct_answer": "A human-centered, iterative approach to problem-solving", "incorrect_answers": ["A linear process for software development", "A set of graphic design rules", "A marketing strategy"] },
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "easy", "question": "Why is empathy important in Design Thinking?", "correct_answer": "It helps designers understand user needs and challenges", "incorrect_answers": ["It is not important", "It helps in writing code faster", "It makes the design look prettier"] },
+                    { "category": "Design Thinking", "type": "multiple", "difficulty": "medium", "question": "What is the main purpose of the 'Define' stage?", "correct_answer": "To frame the problem statement clearly", "incorrect_answers": ["To brainstorm solutions", "To build a prototype", "To interview users"] },
+
+                    // UI Tools
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "easy", "question": "Which of these is a popular vector-based UI design tool?", "correct_answer": "Figma", "incorrect_answers": ["Photoshop", "Procreate", "After Effects"] },
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "medium", "question": "What is a primary advantage of using components in tools like Figma or Sketch?", "correct_answer": "Ensures consistency and allows for easy updates", "incorrect_answers": ["Makes the file size smaller", "Adds animation automatically", "Improves image resolution"] },
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "easy", "question": "Adobe XD is a tool primarily used for:", "correct_answer": "UI/UX design and prototyping", "incorrect_answers": ["Video editing", "3D modeling", "Photo manipulation"] },
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "medium", "question": "What does 'hand-off' mean in the context of UI design tools?", "correct_answer": "Providing developers with design specs and assets", "incorrect_answers": ["Passing the project to another designer", "Deleting the design file", "Printing the design"] },
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "hard", "question": "What is the main difference between Figma and Adobe Photoshop for UI design?", "correct_answer": "Figma is vector-based and collaborative, Photoshop is raster-based", "incorrect_answers": ["Figma is only for wireframes", "Photoshop cannot create prototypes", "There is no difference"] },
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "easy", "question": "What is a 'prototype' in a UI tool?", "correct_answer": "An interactive mock-up of the final product", "incorrect_answers": ["A static image of the design", "A list of color codes", "The source code"] },
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "medium", "question": "Which tool is known for its strong real-time collaboration features?", "correct_answer": "Figma", "incorrect_answers": ["Sketch (natively)", "Adobe Illustrator", "InVision Studio"] },
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "hard", "question": "The term 'Atomic Design' in UI refers to:", "correct_answer": "A methodology for creating design systems with reusable components", "incorrect_answers": ["A specific animation style", "A grid layout system", "A color selection technique"] },
+                    { "category": "UI Tools", "type": "multiple", "difficulty": "medium", "question": "What is a design system?", "correct_answer": "A collection of reusable components and standards", "incorrect_answers": ["A software for designing", "A user testing method", "A project management tool"] },
+
+                    // Product Thinking
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "easy", "question": "What is an MVP in product development?", "correct_answer": "Minimum Viable Product", "incorrect_answers": ["Most Valuable Player", "Maximum Value Proposition", "Main Viable Prototype"] },
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "medium", "question": "The primary goal of an MVP is to:", "correct_answer": "Learn about the market and users with the least effort", "incorrect_answers": ["Launch a perfect, feature-complete product", "Make the most money on day one", "Impress investors with a flashy demo"] },
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "medium", "question": "What is a 'user story' in Agile development?", "correct_answer": "A simple description of a feature from a user's perspective", "incorrect_answers": ["A long-form user interview transcript", "A fictional story about the product", "A customer support ticket"] },
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "hard", "question": "What does the 'Jobs to Be Done' (JTBD) framework focus on?", "correct_answer": "The user's underlying motivation for using a product", "incorrect_answers": ["The specific features a user requests", "The demographic of the user", "The user's job title"] },
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "easy", "question": "What is a product roadmap?", "correct_answer": "A high-level plan that outlines the evolution of a product", "incorrect_answers": ["A detailed list of bugs", "A user manual", "A marketing brochure"] },
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "medium", "question": "What are KPIs in the context of product management?", "correct_answer": "Key Performance Indicators", "incorrect_answers": ["Key Product Initiatives", "Known Programming Issues", "Key Persona Interviews"] },
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "hard", "question": "A 'Pivot' in the startup world means:", "correct_answer": "A fundamental change in business strategy", "incorrect_answers": ["A small UI design change", "Hiring a new CEO", "Getting a new round of funding"] },
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "easy", "question": "Who is the primary audience for a product's value proposition?", "correct_answer": "The target customer", "incorrect_answers": ["The developers", "The investors", "The company's CEO"] },
+                    { "category": "Product Thinking", "type": "multiple", "difficulty": "medium", "question": "What is the purpose of a competitive analysis?", "correct_answer": "To understand the strengths and weaknesses of rival products", "incorrect_answers": ["To copy features from competitors", "To prove your product is superior", "To set your product's price"] }
+                ]
+            };
+            
+            // --- ACCESSIBILITY MANAGEMENT ---
+            const loadAccessibilitySettings = () => {
+                const savedSettings = localStorage.getItem('accessibilitySettings');
+                accessibilitySettings = savedSettings ? JSON.parse(savedSettings) : {
+                    highContrast: false,
+                    fontSize: 16,
+                    timerDisabled: false
+                };
+                applyAccessibilitySettings();
+            };
+
+            const saveAccessibilitySettings = () => {
+                localStorage.setItem('accessibilitySettings', JSON.stringify(accessibilitySettings));
+            };
+
+            const applyAccessibilitySettings = () => {
+                document.documentElement.setAttribute('data-high-contrast', accessibilitySettings.highContrast);
+                highContrastToggle.checked = accessibilitySettings.highContrast;
+                
+                document.documentElement.style.setProperty('--font-size-base', `${accessibilitySettings.fontSize}px`);
+                
+                disableTimerToggle.checked = accessibilitySettings.timerDisabled;
+                if (accessibilitySettings.timerDisabled) {
+                    stopTimer();
+                    timerEl.classList.add('hidden');
+                } else {
+                    timerEl.classList.remove('hidden');
+                }
+            };
+
+            // --- THEME MANAGEMENT ---
+            const applyTheme = (theme) => {
+                document.documentElement.setAttribute('data-theme', theme);
+                themeToggle.setAttribute('aria-checked', theme === 'dark');
+                localStorage.setItem('quizTheme', theme);
+            };
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+
+            // --- UTILITY FUNCTIONS ---
+            const showScreen = (screenId) => {
+                Object.values(screens).forEach(screen => screen.classList.add('hidden'));
+                screens[screenId].classList.remove('hidden');
+            };
+
+            const shuffleArray = (array) => {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            };
+
+            // --- STATE MANAGEMENT ---
+            const saveState = () => {
+                state.lastActivity = Date.now();
+                localStorage.setItem('quizState', JSON.stringify(state));
+            };
+
+            const loadState = () => {
+                const savedState = localStorage.getItem('quizState');
+                if (savedState) {
+                    const parsedState = JSON.parse(savedState);
+                    // Auto-clear state after 24 hours of inactivity
+                    const oneDay = 24 * 60 * 60 * 1000;
+                    if (Date.now() - parsedState.lastActivity > oneDay) {
+                        localStorage.removeItem('quizState');
+                        return null;
+                    }
+                    return parsedState;
+                }
+                return null;
+            };
+
+            const resetState = () => {
+                const userName = state ? state.userName : undefined;
+                state = {
+                    userName: userName, // Keep username
+                    currentTopic: null,
+                    currentQuestionIndex: 0,
+                    answers: {},
+                    timeLeft: TIME_LIMIT_MINUTES * 60,
+                    quizCompleted: false,
+                };
+                allQuestions = [];
+                stopTimer();
+                saveState();
+            };
+
+            // --- QUESTION FETCHING ---
+            const fetchQuestions = async () => {
+                showScreen('loader');
+                try {
+                    const promises = TOPICS.map(topic => 
+                        fetch(`https://opentdb.com/api.php?amount=${topic.amount}&category=${topic.category}&type=multiple`)
+                            .then(res => res.json())
+                    );
+                    const results = await Promise.all(promises);
+                    
+                    let fetchedQuestions = [];
+                    results.forEach((result, index) => {
+                        if (result.response_code === 0) {
+                            const topicName = TOPICS[index].name;
+                            const questions = result.results.map(q => ({...q, category: topicName}));
+                            fetchedQuestions.push(...questions);
+                        }
+                    });
+
+                    if (fetchedQuestions.length < TOTAL_QUESTIONS) {
+                        throw new Error('Insufficient questions from API.');
+                    }
+                    allQuestions = fetchedQuestions;
+                    console.log('Successfully fetched questions from API.');
+
+                } catch (error) {
+                    console.warn('API fetch failed, using fallback questions.', error);
+                    allQuestions = fallbackQuestions.results;
+                }
+                
+                // Final check
+                if(allQuestions.length < TOTAL_QUESTIONS) {
+                    // Using a custom modal/alert would be better in a real app
+                    alert("Could not load enough questions to start the quiz. Please try again later.");
+                    return;
+                }
+
+                // Assign questions to topics
+                TOPICS.forEach(topic => {
+                    topic.questions = allQuestions.filter(q => q.category === topic.name);
+                });
+
+                // Resume or start new
+                if (state.quizCompleted) {
+                    showTopics();
+                } else {
+                    if(state.currentTopic) {
+                        startQuiz(state.currentTopic);
+                    } else {
+                        showTopics();
+                    }
+                }
+            };
+            
+            // --- TIMER LOGIC ---
+            const startTimer = () => {
+                if (accessibilitySettings.timerDisabled) return;
+                if (timerInterval) clearInterval(timerInterval);
+                timerInterval = setInterval(() => {
+                    state.timeLeft--;
+                    updateTimerDisplay();
+                    saveState();
+                    if (state.timeLeft <= 0) {
+                        stopTimer();
+                        // Using a custom modal/alert would be better in a real app
+                        alert("Time's up!");
+                        completeQuiz();
+                    }
+                }, 1000);
+            };
+
+            const stopTimer = () => {
+                clearInterval(timerInterval);
+            };
+
+            const updateTimerDisplay = () => {
+                const minutes = Math.floor(state.timeLeft / 60);
+                const seconds = state.timeLeft % 60;
+                timerEl.textContent = `Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            };
+
+
+            // --- UI RENDERING ---
+            const showTopics = () => {
+                topicsGrid.innerHTML = '';
+                TOPICS.forEach(topic => {
+                    const card = document.createElement('div');
+                    card.className = 'topic-card';
+                    card.dataset.topic = topic.name;
+                    card.innerHTML = `<h3>${topic.name}</h3><p>${topic.questions.length} Questions</p>`;
+                    card.addEventListener('click', () => startQuiz(topic.name));
+                    topicsGrid.appendChild(card);
+                });
+                showScreen('topics');
+            };
+
+            const startQuiz = (topicName) => {
+                state.currentTopic = topicName;
+                state.currentQuestionIndex = 0;
+                saveState();
+                renderQuestion();
+                showScreen('quiz');
+                if (!timerInterval && state.timeLeft > 0 && !accessibilitySettings.timerDisabled) {
+                    startTimer();
+                }
+            };
+
+            const renderQuestion = () => {
+                const topic = TOPICS.find(t => t.name === state.currentTopic);
+                if (!topic || !topic.questions) return;
+                
+                const question = topic.questions[state.currentQuestionIndex];
+                const globalQuestionIndex = allQuestions.findIndex(q => q.question === question.question);
+
+                questionCounter.textContent = `Question ${globalQuestionIndex + 1} of ${TOTAL_QUESTIONS}`;
+                questionText.innerHTML = question.question;
+
+                optionsContainer.innerHTML = '';
+                const options = shuffleArray([...question.incorrect_answers, question.correct_answer]);
+                
+                options.forEach(option => {
+                    const optionEl = document.createElement('button');
+                    optionEl.className = 'quiz-option';
+                    optionEl.innerHTML = option;
+                    optionEl.dataset.option = option;
+                    optionEl.setAttribute('role', 'radio');
+                    optionEl.setAttribute('aria-checked', 'false');
+
+                    const answerKey = `${state.currentTopic}-${state.currentQuestionIndex}`;
+                    if (state.answers[answerKey] === option) {
+                        optionEl.classList.add('selected');
+                        optionEl.setAttribute('aria-checked', 'true');
+                    }
+                    
+                    if (state.answers[answerKey]) { // If answered, disable all
+                        optionEl.disabled = true;
+                    }
+
+                    optionEl.addEventListener('click', () => handleOptionSelect(option, question.correct_answer));
+                    optionsContainer.appendChild(optionEl);
+                });
+
+                updateNavButtons();
+            };
+            
+            const handleOptionSelect = (selectedOption, correctOption) => {
+                const answerKey = `${state.currentTopic}-${state.currentQuestionIndex}`;
+                
+                // Allow changing answer if needed
+                // if (state.answers[answerKey]) return; // Uncomment to prevent changing answers
+
+                state.answers[answerKey] = selectedOption;
+                saveState();
+
+                // Update UI
+                const options = optionsContainer.querySelectorAll('.quiz-option');
+                options.forEach(opt => {
+                    opt.disabled = true; // Disable all after selection
+                    opt.classList.remove('selected');
+                    opt.setAttribute('aria-checked', 'false');
+                    if (opt.dataset.option === selectedOption) {
+                        opt.classList.add('selected'); // Just highlight selection, not correctness
+                        opt.setAttribute('aria-checked', 'true');
+                    }
+                });
+            };
+
+            const updateNavButtons = () => {
+                const topic = TOPICS.find(t => t.name === state.currentTopic);
+                prevBtn.disabled = state.currentQuestionIndex === 0;
+                nextBtn.disabled = state.currentQuestionIndex === topic.questions.length - 1;
+                
+                completeSectionBtn.classList.toggle('hidden', state.currentQuestionIndex !== topic.questions.length - 1);
+            };
+
+            const completeQuiz = () => {
+                stopTimer();
+                state.quizCompleted = true;
+                saveState();
+                showScreen('calculation');
+                
+                setTimeout(() => {
+                    calculateAndShowResults();
+                }, 1000);
+            };
+
+            const calculateAndShowResults = () => {
+                let totalScore = 0;
+                let sectionScores = {};
+
+                TOPICS.forEach(topic => {
+                    let topicScore = 0;
+                    topic.questions.forEach((q, index) => {
+                        const answerKey = `${topic.name}-${index}`;
+                        if (state.answers[answerKey] === q.correct_answer) {
+                            topicScore++;
+                        }
+                    });
+                    sectionScores[topic.name] = {
+                        score: topicScore,
+                        total: topic.questions.length
+                    };
+                    totalScore += topicScore;
+                });
+
+                const percentage = Math.round((totalScore / TOTAL_QUESTIONS) * 100);
+
+                resultTitle.textContent = `Hi ${state.userName}, here are your results!`;
+                finalScoreEl.textContent = `${totalScore} / ${TOTAL_QUESTIONS}`;
+                finalPercentageEl.textContent = `Final Grade: ${percentage}%`;
+
+                if (percentage >= 80) {
+                    encouragementMessage.textContent = 'Excellent! 🎉 You have a strong grasp of design principles.';
+                } else if (percentage >= 60) {
+                    encouragementMessage.textContent = 'Good Job! 👍 Keep honing your skills.';
+                } else {
+                    encouragementMessage.textContent = 'Keep Practicing! 📚 Every expert was once a beginner.';
+                }
+
+                sectionResultsContainer.innerHTML = '';
+                for (const [topic, result] of Object.entries(sectionScores)) {
+                    const item = document.createElement('div');
+                    item.className = 'result-item';
+                    item.innerHTML = `<span>${topic}</span><strong>${result.score} / ${result.total}</strong>`;
+                    sectionResultsContainer.appendChild(item);
+                }
+                
+                saveHistory(totalScore, percentage, sectionScores);
+                showScreen('results');
+            };
+            
+            // --- HISTORY MANAGEMENT ---
+            const saveHistory = (score, percentage, sectionScores) => {
+                const history = JSON.parse(localStorage.getItem('quizHistory')) || [];
+                const newEntry = {
+                    date: new Date().toLocaleString(),
+                    name: state.userName,
+                    score: score,
+                    percentage: percentage,
+                    sectionScores: sectionScores
+                };
+                history.unshift(newEntry); // Add to the beginning
+                localStorage.setItem('quizHistory', JSON.stringify(history));
+            };
+            
+            const showHistory = () => {
+                const history = JSON.parse(localStorage.getItem('quizHistory')) || [];
+                historyList.innerHTML = '';
+                if (history.length === 0) {
+                    historyList.innerHTML = '<p>No quiz history found.</p>';
+                } else {
+                    history.forEach(entry => {
+                        const item = document.createElement('div');
+                        item.className = 'history-item';
+                        let breakdownHTML = '<small>';
+                        for (const [topic, result] of Object.entries(entry.sectionScores)) {
+                            breakdownHTML += `${topic}: ${result.score}/${result.total} &nbsp; `;
+                        }
+                        breakdownHTML += '</small>';
+                        
+                        item.innerHTML = `
+                            <p><strong>${entry.name}</strong> - ${entry.date}</p>
+                            <p>Score: ${entry.score}/${TOTAL_QUESTIONS} (${entry.percentage}%)</p>
+                            ${breakdownHTML}
+                        `;
+                        historyList.appendChild(item);
+                    });
+                }
+                historyModal.classList.remove('hidden');
+            };
+
+            // --- EVENT LISTENERS ---
+            getStartedBtn.addEventListener('click', () => showScreen('login'));
+
+            loginBtn.addEventListener('click', () => {
+                const name = userNameInput.value.trim();
+                const code = accessCodeInput.value.trim();
+                if (name && code === ACCESS_CODE) {
+                    state.userName = name;
+                    showScreen('start');
+                    saveState();
+                } else {
+                    loginError.textContent = 'Invalid name or access code.';
+                    loginError.classList.remove('hidden');
+                }
+            });
+            
+            continueBtn.addEventListener('click', fetchQuestions);
+
+            prevBtn.addEventListener('click', () => {
+                if (state.currentQuestionIndex > 0) {
+                    state.currentQuestionIndex--;
+                    renderQuestion();
+                    saveState();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                const topic = TOPICS.find(t => t.name === state.currentTopic);
+                if (state.currentQuestionIndex < topic.questions.length - 1) {
+                    state.currentQuestionIndex++;
+                    renderQuestion();
+                    saveState();
+                }
+            });
+            
+            completeSectionBtn.addEventListener('click', () => {
+                const topic = TOPICS.find(t => t.name === state.currentTopic);
+                const answeredInSection = topic.questions.filter((q, i) => state.answers[`${topic.name}-${i}`]).length;
+                
+                if (answeredInSection < topic.questions.length) {
+                    if (!confirm('You have unanswered questions in this section. Are you sure you want to continue?')) {
+                        return;
+                    }
+                }
+                
+                const answeredTotal = Object.keys(state.answers).length;
+                if (answeredTotal === TOTAL_QUESTIONS) {
+                    completeQuiz();
+                } else {
+                    showTopics();
+                }
+            });
+            
+            restartBtn.addEventListener('click', () => {
+                resetState();
+                showScreen('start');
+            });
+            
+            viewHistoryBtn.addEventListener('click', showHistory);
+            closeHistoryBtn.addEventListener('click', () => historyModal.classList.add('hidden'));
+
+            // Accessibility Listeners
+            accessibilityBtn.addEventListener('click', () => accessibilityModal.classList.remove('hidden'));
+            closeAccessibilityBtn.addEventListener('click', () => accessibilityModal.classList.add('hidden'));
+
+            highContrastToggle.addEventListener('change', (e) => {
+                accessibilitySettings.highContrast = e.target.checked;
+                applyAccessibilitySettings();
+                saveAccessibilitySettings();
+            });
+
+            increaseFontBtn.addEventListener('click', () => {
+                if (accessibilitySettings.fontSize < 24) { // Max font size
+                    accessibilitySettings.fontSize += 2;
+                    applyAccessibilitySettings();
+                    saveAccessibilitySettings();
+                }
+            });
+
+            decreaseFontBtn.addEventListener('click', () => {
+                if (accessibilitySettings.fontSize > 12) { // Min font size
+                    accessibilitySettings.fontSize -= 2;
+                    applyAccessibilitySettings();
+                    saveAccessibilitySettings();
+                }
+            });
+            
+            disableTimerToggle.addEventListener('change', (e) => {
+                accessibilitySettings.timerDisabled = e.target.checked;
+                if (accessibilitySettings.timerDisabled) {
+                    stopTimer();
+                } else if (state.currentTopic && !state.quizCompleted) {
+                    startTimer();
+                }
+                applyAccessibilitySettings();
+                saveAccessibilitySettings();
+            });
+
+            extendTimeBtn.addEventListener('click', () => {
+                state.timeLeft += 15 * 60;
+                updateTimerDisplay();
+                saveState();
+            });
+
+            // --- INITIALIZATION ---
+            const init = () => {
+                loadAccessibilitySettings();
+
+                // Set theme from localStorage or system preference
+                const savedTheme = localStorage.getItem('quizTheme');
+                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+                const savedState = loadState();
+                if (savedState && savedState.userName) {
+                    state = savedState;
+                    updateTimerDisplay();
+                    // If quiz was in progress, go fetch questions and resume
+                    if (!state.quizCompleted && state.currentTopic) {
+                        fetchQuestions();
+                    } else if (state.quizCompleted) {
+                        // If completed, show topics for a new quiz
+                        state.quizCompleted = false; // Allow new quiz
+                        resetState();
+                        fetchQuestions();
+                    }
+                    else {
+                        showScreen('start');
+                    }
+                } else {
+                    resetState();
+                    showScreen('intro');
+                    setTimeout(() => {
+                        introLoader.classList.add('hidden');
+                        getStartedBtn.classList.remove('hidden');
+                    }, 1500); // Simulate loading
+                }
+            };
+
+            init();
+        });
+    </script>
+</body>
+</html>
